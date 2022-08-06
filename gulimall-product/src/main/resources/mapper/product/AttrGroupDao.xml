@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cqm.gulimall.product.dao.AttrGroupDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.cqm.gulimall.product.entity.AttrGroupEntity" id="attrGroupMap">
+        <result property="attrGroupId" column="attr_group_id"/>
+        <result property="attrGroupName" column="attr_group_name"/>
+        <result property="sort" column="sort"/>
+        <result property="descript" column="descript"/>
+        <result property="icon" column="icon"/>
+        <result property="catelogId" column="catelog_id"/>
+    </resultMap>
+<!--    resultType 返回集合里面元素的类型  只要有嵌套属性就要封装自定义结果集   某个类的内部类 需要把.换成$-->
+    <resultMap type="com.cqm.gulimall.product.vo.SkuItemVO$SpuItemAttrGroupVo" id="spuItemAttrGroupVo">
+        <result property="groupName" column="attr_group_name"/>
+<!--  collection表示集合      ofType 集合中的元素类型  -->
+        <collection property="attrs" ofType="com.cqm.gulimall.product.vo.SkuItemVO$SpuBaseAttrVo">
+            <result property="attrName" column="attr_name"/>
+            <result property="attrValue" column="attr_value"/>
+        </collection>
+    </resultMap>
+    <select id="getAttrGroupWithAttrsBySpuId"
+            resultMap="spuItemAttrGroupVo">
+        SELECT pg.attr_group_id ,pg.attr_group_name ,pr.attr_id , pa.attr_name , pv.attr_value
+        FROM `pms_attr_group` AS pg LEFT JOIN `pms_attr_attrgroup_relation` AS pr ON pg.attr_group_id=pr.attr_group_id
+        LEFT JOIN `pms_attr` AS pa ON pa.attr_id = pr.attr_id
+        LEFT JOIN `pms_product_attr_value` AS pv ON pv.attr_id = pr.attr_id
+        WHERE pg.catelog_id =#{catalogId} AND spu_id = #{spuId}
+    </select>
+
+
+</mapper>

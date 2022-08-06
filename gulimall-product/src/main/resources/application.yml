@@ -1,0 +1,54 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://192.168.13.131:3306/gulimall_pms?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: root
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+  main:
+    allow-circular-references: true
+  application:
+    name: gulimall-product
+#时间格式化,json 传过来后的时间会按照写的格式转换
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+  thymeleaf:
+    cache: false #测试环境就false
+
+  redis:
+    host: 192.168.13.131
+    port: 6379
+  session:
+    store-type: redis
+  #spring cache配置
+  cache:
+    type: redis #指定使用redis做缓存，内部autoconfiguration会为我们配置redisCacheConfiguration
+   # cache-names: qq,cqm
+    redis:
+      time-to-live: 300000 #ms
+#      key-prefix: CACHE_ #如果指定了前缀，key就是指定前缀，不然就是默认cache-names：：
+#      use-key-prefix: false #是否使用前缀
+
+mybatis-plus:
+  global-config:
+    db-config:
+      id-type: auto #设置所有主键生成规则 和entity 上的注解@TableId【标识主键】 搭配使用
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+  mapper-locations: classpath:/mapper/**/*.xml #classpath* 不止扫描自己的类路径引用的其他jar包的类路径都扫描
+
+
+server:
+  port: 10001
+
+logging:
+  level:
+    com.cqm.gulimall: error
+gulimall:
+  thread:
+    core-size: 20
+    max-size: 200
+    keep-alive-time: 10

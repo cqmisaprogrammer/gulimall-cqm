@@ -1,0 +1,75 @@
+spring:
+
+  application:
+    name: gulimall-gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+    gateway:
+      routes:
+#        - id: test_rout
+#          uri: http://www.baidu.com
+#          predicates:
+#            - Query=url,baidu
+#        - id: qq_rout
+#          uri: https://www.qq.com
+#          predicates:
+#            - Query=url,qq
+        - id: product_route
+          uri: lb://gulimall-product
+          predicates:
+            - Path=/api/product/**,/hello #路径过滤 ，带了api前缀的都可以访问到admin
+          filters:
+            - RewritePath=/api/(?<segment>.*), /$\{segment} #路径重写
+        - id: member_route
+          uri: lb://gulimall-member
+          predicates:
+            - Path=/api/member/** #路径过滤 ，带了api前缀的都可以访问到admin
+          filters:
+            - RewritePath=/api/(?<segment>.*), /$\{segment} #路径重写
+        - id: ware_route
+          uri: lb://gulimall-ware
+          predicates:
+            - Path=/api/ware/** #路径过滤 ，带了api前缀的都可以访问到admin
+          filters:
+            - RewritePath=/api/(?<segment>.*), /$\{segment} #路径重写
+        - id: thirdparty_route
+          uri: lb://gulimall-third-party
+          predicates:
+            - Path=/api/thirdparty/** #路径过滤 ，带了api前缀的都可以访问到admin
+          filters:
+            - RewritePath=/api/thirdparty/(?<segment>.*), /$\{segment} #路径重写
+        - id: admin_route
+          uri: lb://renren-fast
+          predicates:
+            - Path=/api/** #路径过滤 ，带了api前缀的都可以访问到admin
+          filters:
+            - RewritePath=/api/?(?<segment>.*), /renren-fast/$\{segment} #路径重写
+        - id: gulimall_host_rout #通过gulimall.com 访问nginx 再打到网关
+          uri: lb://gulimall-product
+          predicates:
+            - Host=gulimall.com,item.gulimall.com #路径过滤 ，带了api前缀的都可以访问到admin
+        - id: gulimall_search_rout #通过gulimall.com 访问nginx 再打到网关
+          uri: lb://gulimall-search
+          predicates:
+            - Host=search.gulimall.com #路径过滤 ，带了api前缀的都可以访问到admin
+        - id: gulimall_auth_rout #通过gulimall.com 访问nginx 再打到网关
+          uri: lb://gulimall-auth-server
+          predicates:
+            - Host=auth.gulimall.com #路径过滤 ，带了api前缀的都可以访问到admin
+        - id: gulimall_cart_rout #通过gulimall.com 访问nginx 再打到网关
+          uri: lb://gulimall-cart-server
+          predicates:
+            - Host=cart.gulimall.com #路径过滤 ，带了api前缀的都可以访问到admin
+        - id: gulimall_order_rout #通过gulimall.com 访问nginx 再打到网关
+          uri: lb://gulimall-order
+          predicates:
+            - Host=order.gulimall.com #路径过滤 ，带了api前缀的都可以访问到admin
+##前端项目默认带 /api
+
+
+server:
+  port: 88
+
+

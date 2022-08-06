@@ -1,0 +1,15 @@
+server:
+  port: 30000
+
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+  alicloud:
+    sms:
+      host: https://dfsns.market.alicloudapi.com
+      path: /data/send_sms
+      template: TPL_0000
+  application:
+    name: gulimall-third-party

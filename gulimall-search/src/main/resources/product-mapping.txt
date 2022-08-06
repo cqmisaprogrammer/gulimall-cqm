@@ -1,0 +1,71 @@
+PUT product
+{
+  "mappings": {
+    "properties": {
+      "skuId":{
+        "type": "long"
+      },
+      "spuId":{
+        "type": "keyword"
+      },
+      "skuTitle":{
+        "type": "text",
+        "analyzer": "ik_smart"
+      },
+      "skuPrice":{
+        "type": "keyword"
+      },
+      "skuImg":{
+        "type": "keyword",
+        "index": false, #不用来检索
+        "doc_values": false #不用来聚合不会存储额外数据
+      },
+      "saleCount":{
+        "type": "long"
+      },
+      "hasStock":{
+        "type": "boolean"
+      },
+      "hotScore":{
+        "type": "long"
+      },
+      "brandId":{
+        "type": "long"
+      },
+      "catalogId":{
+        "type": "long"
+      },
+      "brandName":{
+        "type": "keyword",
+        "index": false, #不用来检索
+        "doc_values": false #不用来聚合不会存储额外数据
+      },
+      "brandImg":{
+        "type": "keyword",
+        "index": false, #不用来检索
+        "doc_values": false #不用来聚合不会存储额外数据
+      },
+      "catalogName":{
+        "type": "keyword",
+        "index": false, #不用来检索
+        "doc_values": false #不用来聚合不会存储额外数据
+      },
+      "attrs":{
+        "type": "nested",
+        "properties": {
+          "attrId":{
+            "type": "long"
+          },
+           "attrName":{
+            "type": "keyword"
+            "index": false,
+            "doc_values": false
+          },
+          "attrValue":{
+            "type": "keyword"
+          }
+        }
+      }
+    }
+  }
+}
